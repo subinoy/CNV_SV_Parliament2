@@ -1,43 +1,69 @@
-# CNV_SV_Parliament2
+# Parliament2 Singularity Workflow for Structural Variant Analysis
 
-This is a Parliament2 Singularity container based workflow for processing structural variants of .bam files.
+This workflow is designed to process structural variants (SVs) from .bam files using the Parliament2 pipeline within a Singularity container. Below are the details of the workflow structure and usage instructions.
 
-Data folder contains list of bam files and list of target folders where each bam file were processed for structural variants by Parliament2 workflow.
+# Data Structure
+The data folder contains:
 
-## Splitting 221 bam file list
+A list of BAM files.
+A corresponding list of target folders where each BAM file will be processed by the Parliament2 workflow.
+
+
+## Splitting the 221 BAM File List
 ## ----------------------------
-src folder contains ***folder_run_split.sh*** which split the list of bams and folder into a chunk of 10 bams and 10 corresponding folders which will be used to run the Parliament2 SV calling process in one batch. Thus in one job submission in a cluster it will run 10 bam files. Parallely 21 process will be running simultanaeously to complete 221 total bam files.
+The src folder includes the script ***folder_run_split.sh***, which divides the list of BAM files and target folders into chunks of 10 files each.
 
-## Running first job
+## Features:
+Each chunk contains 10 BAM files and their corresponding output folders.
+This enables efficient processing by running one batch (10 files) per job submission in a cluster environment.
+In total, 21 parallel processes will run simultaneously to process all 221 BAM files.
+
+## Running the First Job
 ## ----------------------
- *bash b00_lumpy_00.sh*  
- 
- will take input of 
+To initiate the workflow, execute the following command:
 
-  **ds_221_b00**
+  *bash b00_lumpy_00.sh* 
+
+### Inputs:
+  - **ds_221_b00**: The BAM file list for this batch.
+
+  - **f_221_00**: The folder list for this batch.
   
-  **f_221_00**
+### Output:
+The script automatically generates output file names based on the input BAM file names.
 
-Output file name will be automatically generate by the script depending upon the input bam file name
 
-## Alternative Parliament2 run
-Instead of the above script if someone wants to run few bams for that one can use
 
-*loop_11_15_parl2_run.sh*
+## Alternative Parliament2 Workflow
 
-One need to supply corresponding bam and folder list.
+For processing a smaller number of BAM files without using the full pipeline, you can use the script:
 
-## SV count
-After processing all the bams if someone interested to count how many different SV were called for each bam files and generate a table, they can run
+  *loop_11_15_parl2_run.sh*
 
-***sv_counts_CU167_v2.py***
+Usage:
+Provide the corresponding BAM file list and target folder list as inputs to this scri
 
-It will generate a tab delimited file of each bam file's
-* INS,
-* DEL,
-* DUP and
-* BND
-  
- Also it will report total number of SV for each bam.
+## Counting Structural Variants (SVs)
+After processing all BAM files, you can count and summarize the detected structural variants using the script:
+
+  ***sv_counts_CU167_v2.py***
+
+Output:
+The script generates a tab-delimited file that includes the following SV counts for each BAM file:
+
+  - **INS**: Insertions
+
+  - **DEL**: Deletions
+
+  - **DUP**: Duplications
+
+  - **BND**: Breakends
+
+  - **Total**: Total number of SVs detected
+
+
+This table provides an overview of SVs across all processed BAM files.
+
+
 
 
